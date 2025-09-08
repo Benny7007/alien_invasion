@@ -3,6 +3,7 @@ import pygame
 from settings import Settings # type: ignore 从settings.py中导入Settings类
 from ship import Ship # type: ignore
 from bullet import Bullet # type: ignore
+from alien import Alien
 
 class AlienInvasion:
     #管理游戏资源和行为的类
@@ -18,6 +19,9 @@ class AlienInvasion:
 
         self.ship=Ship(self)
         self.bullets=pygame.sprite.Group()
+        self.aliens=pygame.sprite.Group()
+
+        self._create_fleet()
         #设置背景色
         #self.bg_color=(230,230,230)
     
@@ -79,7 +83,7 @@ class AlienInvasion:
             self.ship.moving_up=True
         elif event.key==pygame.K_DOWN:
             self.ship.moving_down=True
-        #按q键退出,必须是英文的q按键
+        #按q键退出,必须是英文的q按键,所以换成了Esc键
         elif event.key==pygame.K_ESCAPE:
             sys.exit()
         elif event.key==pygame.K_SPACE:
@@ -109,6 +113,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()                  
         self.ship.blitme()
+        self.aliens.draw(self.screen)
 
         pygame.display.flip()
     
@@ -121,6 +126,13 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom<=0:
                 self.bullets.remove(bullet)
+    
+    def _create_fleet(self):
+        #创建一个外星舰队
+        #创建一个外星人
+        alien=Alien(self)
+        self.aliens.add(alien)
+
         
 
 if __name__=='__main__':
